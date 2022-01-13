@@ -12,7 +12,7 @@ const isValid = function (value) {
     return true
 }
 
-const questionCreator = async function (req, res) {
+const create_question = async function (req, res) {
     try {
         requestBody = req.body
         let userId = req.params.userId
@@ -52,7 +52,7 @@ const questionCreator = async function (req, res) {
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-const questionFinder = async function (req, res) {
+const find_question = async function (req, res) {
     try {
         let query = req.query
         const { sort, tag } = query
@@ -182,7 +182,7 @@ const questionFinder = async function (req, res) {
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-const questionFinderById = async function (req, res) {
+const find_question_by_id = async function (req, res) {
     try {
         let qId = req.params.questionId
         if (!qId) {
@@ -206,7 +206,7 @@ const questionFinderById = async function (req, res) {
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-const questionUpdator = async function (req, res) {
+const update_question = async function (req, res) {
     try {
         let userId = req.body.userId
         let questionId = req.params.questionId
@@ -279,7 +279,7 @@ const questionUpdator = async function (req, res) {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
-const questionDeletor=async function(req,res){
+const delete_question=async function(req,res){
     try{
         let userId = req.body.userId
         let questionId = req.params.questionId
@@ -297,7 +297,8 @@ const questionDeletor=async function(req,res){
         if (!document) {
             return res.status(400).send({ 'msg': "question not found with given id" })
         }
-        isDeleted=await questionModel.findOneAndUpdate({_id:questionId,isDeleted:false},{isDeleted:true},{new:true})
+        let delDate=new Date()
+        isDeleted=await questionModel.findOneAndUpdate({_id:questionId,isDeleted:false},{isDeleted:true,deletedAt:delDate},{new:true})
         if(isDeleted){
             return res.status(200).send('question deleted successfully')
         }
@@ -310,4 +311,4 @@ const questionDeletor=async function(req,res){
 
 
 
-module.exports = { questionCreator, questionFinder, questionFinderById, questionUpdator,questionDeletor }
+module.exports = { create_question, find_question, find_question_by_id, update_question,delete_question }

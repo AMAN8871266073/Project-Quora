@@ -14,7 +14,7 @@ const isValid = function (value) {
 let isValidId = function (id) {
     return mongoose.isValidObjectId(id)
 }
-const answerRegistrar = async function (req, res) {
+const create_answer = async function (req, res) {
     try {
         let requestBody = req.body
         let uId = requestBody.userId
@@ -63,7 +63,7 @@ const answerRegistrar = async function (req, res) {
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
-const answerFinderByQuestion = async function (req, res) {
+const find_answer_by_question = async function (req, res) {
     try {
         let questionId = req.params.questionId
         if (!questionId) {
@@ -81,7 +81,7 @@ const answerFinderByQuestion = async function (req, res) {
     }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
-const answerUpdator=async function(req,res){
+const update_answer=async function(req,res){
     try{
         let userId = req.body.userId
         let answerId = req.params.answerId
@@ -117,7 +117,7 @@ const answerUpdator=async function(req,res){
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
-const answerDeletor=async function(req,res){
+const delete_answer=async function(req,res){
     try{
         let userId = req.body.userId
         let answerId = req.params.answerId
@@ -154,4 +154,4 @@ const answerDeletor=async function(req,res){
     }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-module.exports = { answerRegistrar, answerFinderByQuestion, answerUpdator, answerDeletor }
+module.exports = { create_answer,find_answer_by_question, update_answer, delete_answer }

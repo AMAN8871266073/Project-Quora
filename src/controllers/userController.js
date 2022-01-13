@@ -13,7 +13,6 @@ const isValid = function (value) {
     if (typeof value === 'string' && value.trim().length === 0) return false
     return true
 }
-
 const isValidNumber = function (phone) {
     return /^[6-9]\d{9}$/.test(phone)
 }
@@ -21,11 +20,11 @@ const isValidEmail = function (email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-const registrar = async function (req, res) {
+const create_user = async function (req, res) {
     try {
         let requestBody = req.body
         let userData = {}
-        const { fname, lname, email, phone, password,creditScore } = requestBody
+        const { fname, lname, email, phone, password } = requestBody
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ 'msg': 'valid request Body is required' })
         }
@@ -52,12 +51,6 @@ const registrar = async function (req, res) {
                 return res.status(400).send({ 'msg': "phone number already used" })
             }
         }
-        if(creditScore){
-            if(creditScore<0){
-                return res.status(400).send({'msg':'invalid credit score entered'})
-            }
-        }
-        userData['creditScore'] = creditScore
 
         let firstName = fname.trim()
         if (!isValid(firstName)) {
@@ -93,7 +86,7 @@ const registrar = async function (req, res) {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const logger = async function (req, res) {
+const login_user = async function (req, res) {
     try {
         requestBody = req.body
         if (!(isValidRequestBody(requestBody))) {
@@ -131,7 +124,7 @@ const logger = async function (req, res) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const detailor = async function (req, res) {
+const user_profile = async function (req, res) {
     try {
         let id = req.params.userId
         let userProfile = await userModel.findOne({_id: id })
@@ -144,7 +137,7 @@ const detailor = async function (req, res) {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
-const userUpdator = async function (req, res) {
+const update_user = async function (req, res) {
     try {
         let userId = req.params.userId
         isUserExist = await userModel.findOne({_id: userId })
@@ -213,4 +206,4 @@ const userUpdator = async function (req, res) {
 //////////////////////////////////////////////////////////////////
 
 
-module.exports = { registrar, logger, detailor, userUpdator }
+module.exports = { create_user, login_user, user_profile, update_user }

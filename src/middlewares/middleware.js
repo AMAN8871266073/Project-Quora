@@ -10,11 +10,11 @@ const isValidId = function (userId) {
     return Mongoose.isValidObjectId(userId)
 }
 ////////////////////////////////////////////////////////////////////////////
-const authenticator = function (req, res, next) {
+const authorize = function (req, res, next) {
     try {
         let id = req.params.userId
-        if(!id){
-            id=req.body.userId
+        if (!id) {
+            id = req.body.userId
         }
         let userId = id.trim()
         if (!(isValid(userId))) {
@@ -32,12 +32,9 @@ const authenticator = function (req, res, next) {
             token = arr[1]
         }
         let decoded = jwt.verify(token, 'AmanTandon');
-        if (decoded) {
-            if (decoded.userId == userId) {
-                next()
-            } else {
-                return res.status(402).send({ "msg": 'authentication failed' })
-            }
+        if (decoded.userId) {
+            req.headers['userId'] = decoded.userId
+            next()
         } else {
             return res.status(402).send({ 'msg': 'Authorization failed' })
         }
@@ -45,5 +42,16 @@ const authenticator = function (req, res, next) {
         return res.status(500).send({ 'error': err })
     }
 }
+const authenticate=function(req,res,next){
+    try{
+       let h_id=req.headers.userId
+       let p_id=req.params.userId
+       if(h_id==p_id){
+           next()
+       }
+    }catch(err){
+        res.status(500).send({'error':err})
+    }
+}
 
-module.exports.authenticator = authenticator
+module.exports = {authorize,authenticate}
